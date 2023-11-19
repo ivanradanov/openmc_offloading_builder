@@ -32,13 +32,15 @@ module load hdf5
 
 # Compiler dependency (llvm, oneapi)
 # On the Argonne JLSE cluster, use "module load llvm/master-nightly"
-module load llvm
+#module load llvm
+module load rocm
+. llvm-enable-corona.sh --release
 
 # GPU target/compiler selection (full list in OpenMC's main directory
 # CmakePrests.json file at:
 # https://github.com/exasmr/openmc/blob/openmp-target-offload/CMakePresets.json)
 # (some options are llvm_a100, llvm_v100, llvm_mi100, llvm_mi250x, spirv_aot)
-OPENMC_TARGET=llvm_a100
+OPENMC_TARGET=llvm_mi50
 
 # If you are compiling for NVIDIA or Intel, you may want to enable
 # use of a vendor library to accelerate particle sorting.
@@ -79,14 +81,17 @@ fi
 
 if [ "$1" = "all" ] || [ "$1" = "compile" ]; then
 
+BUILD_DIR="/l/ssd/ivanov2/openmc-offloading/build/"
+INSTALL_DIR="$BUILD_DIR/../install"
+
 # Create directories and delete old build/install
 cd openmc
-rm -rf build
-rm -rf install
-mkdir build
-mkdir install
-cd build
-cmake --preset=${OPENMC_TARGET} -DCMAKE_INSTALL_PREFIX=../install -Doptimize=on -Ddevice_printf=off -Ddebug=${OPENMC_DEBUG_LINE_INFO} -Dcuda_thrust_sort=${OPENMC_NVIDIA_SORT} -Dsycl_sort=${OPENMC_INTEL_SORT} -Dhip_thrust_sort=${OPENMC_AMD_SORT} ..
+rm -rf "$BUILD_DIR"
+rm -rf "$INSTALL_DIR"
+mkdir -p "$BUILD_DIR"
+mkdir -p "$INSTALL_DIR"
+cd "$BUILD_DIR"
+cmake --preset=${OPENMC_TARGET} -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" -Doptimize=on -Ddevice_printf=off -Ddebug=${OPENMC_DEBUG_LINE_INFO} -Dcuda_thrust_sort=${OPENMC_NVIDIA_SORT} -Dsycl_sort=${OPENMC_INTEL_SORT} -Dhip_thrust_sort=${OPENMC_AMD_SORT} "$TEST_DIR/openmc"
 make VERBOSE=1 install
 
 fi
@@ -94,8 +99,8 @@ fi
 ####################################################################
 # Setup OpenMC Environment
 
-export LD_LIBRARY_PATH=${TEST_DIR}/openmc/install/lib64:$LD_LIBRARY_PATH
-export PATH=${TEST_DIR}/openmc/install/bin:$PATH
+export LD_LIBRARY_PATH="$INSTALL_DIR/lib64:$LD_LIBRARY_PATH"
+export PATH="$INSTALL_DIR/bin:$PATH"
 export OPENMC_CROSS_SECTIONS=${TEST_DIR}/nndc_hdf5/cross_sections.xml
 export OMP_TARGET_OFFLOAD=MANDATORY
 
