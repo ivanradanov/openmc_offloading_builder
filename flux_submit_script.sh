@@ -4,7 +4,7 @@ set -e
 set -x
 
 CURDATE=$(date +"%Y-%m-%dT%H:%M:%S%z")
-TIMEOUT=1h
+TIMEOUT=5h
 
 JOB_LOG_DIR="$LCWS/results/jobs/"
 mkdir -p "$JOB_LOG_DIR"

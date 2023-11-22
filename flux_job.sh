@@ -31,29 +31,29 @@ for dc in $DYN_CONV; do
 
         RUN_INFO="$OMP_PROFILE_DIR/run_info"
 
-        echo "Factor is $i" &>> "$RUN_INFO"
-        echo "Dynamic convergence is $dc" &>> "$RUN_INFO"
-        echo "Openmc offload:" &>> "$RUN_INFO"
-        git log -1 &>> "$RUN_INFO"
+        echo "Factor is $i" 2>&1 | tee -a "$RUN_INFO"
+        echo "Dynamic convergence is $dc" 2>&1 | tee -a "$RUN_INFO"
+        echo "Openmc offload:" 2>&1 | tee -a "$RUN_INFO"
+        git log -1 2>&1 | tee -a "$RUN_INFO"
         cd openmc
-        echo "Openmc:" &>> "$RUN_INFO"
-        git log -1 &>> "$RUN_INFO"
+        echo "Openmc:" 2>&1 | tee -a "$RUN_INFO"
+        git log -1 2>&1 | tee -a "$RUN_INFO"
         cd -
-        echo "clang:" &>> "$RUN_INFO"
-        clang --version &>> "$RUN_INFO"
-        clang++ --version &>> "$RUN_INFO"
+        echo "clang:" 2>&1 | tee -a "$RUN_INFO"
+        clang --version 2>&1 | tee -a "$RUN_INFO"
+        clang++ --version 2>&1 | tee -a "$RUN_INFO"
 
-        echo Compiling...
-        ./build_openmc.sh compile
+        echo Compiling... 2>&1 | tee -a "$RUN_INFO"
+        ./build_openmc.sh compile 2>&1 | tee -a "$RUN_INFO"
 
-        echo Validating...
-        ./build_openmc.sh validate &>> "$RUN_INFO"
+        echo Validating... 2>&1 | tee -a "$RUN_INFO"
+        ./build_openmc.sh validate 2>&1 | tee -a "$RUN_INFO"
 
-        echo Running...
+        echo Running... 2>&1 | tee -a "$RUN_INFO"
         LIBOMPTARGET_PROFILE_DIR="$OMP_PROFILE_DIR/openmc/"
         mkdir -p "$LIBOMPTARGET_PROFILE_DIR"
         for run in $(seq "$NRUNS"); do
-            LIBOMPTARGET_PROFILE="$LIBOMPTARGET_PROFILE_DIR/openmp.profile.out.$run" ./build_openmc.sh performance &>> "$RUN_INFO"
+            LIBOMPTARGET_PROFILE="$LIBOMPTARGET_PROFILE_DIR/openmp.profile.out.$run" ./build_openmc.sh performance 2>&1 | tee -a "$RUN_INFO"
         done
     done
 done
