@@ -23,9 +23,9 @@ fi
 ####################################################################
 
 # HDF5 and CMake dependencies
-module load spack
+#module load spack
 module load cmake
-module load hdf5
+#module load hdf5
 
 # Note - If you have manually compiled HDF5, set the HDF5_ROOT
 # environment variable to your install location
@@ -50,7 +50,7 @@ OPENMC_INTEL_SORT=off
 OPENMC_AMD_SORT=off
 
 # Enable compiler debugging line information (-gline-tables-only)
-OPENMC_DEBUG_LINE_INFO=off
+OPENMC_DEBUG_LINE_INFO=on
 
 ####################################################################
 # END PREAMBLE
@@ -79,10 +79,10 @@ fi
 ####################################################################
 # Compilation
 
-if [ "$1" = "all" ] || [ "$1" = "compile" ]; then
-
 BUILD_DIR="/l/ssd/ivanov2/openmc-offloading/build/"
-INSTALL_DIR="$BUILD_DIR/../install"
+INSTALL_DIR="$(readlink -f "$BUILD_DIR/../install")"
+
+if [ "$1" = "all" ] || [ "$1" = "compile" ]; then
 
 # Create directories and delete old build/install
 cd openmc
@@ -91,7 +91,7 @@ rm -rf "$INSTALL_DIR"
 mkdir -p "$BUILD_DIR"
 mkdir -p "$INSTALL_DIR"
 cd "$BUILD_DIR"
-cmake --preset=${OPENMC_TARGET} -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" -Doptimize=on -Ddevice_printf=off -Ddebug=${OPENMC_DEBUG_LINE_INFO} -Dcuda_thrust_sort=${OPENMC_NVIDIA_SORT} -Dsycl_sort=${OPENMC_INTEL_SORT} -Dhip_thrust_sort=${OPENMC_AMD_SORT} "$TEST_DIR/openmc"
+cmake --preset=${OPENMC_TARGET} -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" -Doptimize=on -Ddevice_printf=off -Ddebug=${OPENMC_DEBUG_LINE_INFO} -Dcuda_thrust_sort=${OPENMC_NVIDIA_SORT} -Dsycl_sort=${OPENMC_INTEL_SORT} -Dhip_thrust_sort=${OPENMC_AMD_SORT} "$TEST_DIR/openmc" -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 make VERBOSE=1 install
 
 fi
