@@ -81,7 +81,8 @@ fi
 # Compilation
 
 BUILD_DIR="/l/ssd/ivanov2/openmc-offloading/build/"
-INSTALL_DIR="$(readlink -f "$BUILD_DIR/../install")"
+INSTALL_DIR="/l/ssd/ivanov2/openmc-offloading/install/"
+#INSTALL_DIR="$(readlink -f "$BUILD_DIR/../install")"
 
 if [ "$1" = "all" ] || [ "$1" = "compile" ]; then
 
@@ -92,7 +93,7 @@ rm -rf "$INSTALL_DIR"
 mkdir -p "$BUILD_DIR"
 mkdir -p "$INSTALL_DIR"
 cd "$BUILD_DIR"
-cmake --preset=${OPENMC_TARGET} -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" -Doptimize=on -Ddevice_printf=off -Ddebug=${OPENMC_DEBUG_LINE_INFO} -Dcuda_thrust_sort=${OPENMC_NVIDIA_SORT} -Dsycl_sort=${OPENMC_INTEL_SORT} -Dhip_thrust_sort=${OPENMC_AMD_SORT} "$TEST_DIR/openmc" -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+cmake --preset=${OPENMC_TARGET} -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" -Doptimize=on -Ddevice_printf=off -Ddebug=${OPENMC_DEBUG_LINE_INFO} -Dcuda_thrust_sort=${OPENMC_NVIDIA_SORT} -Dsycl_sort=${OPENMC_INTEL_SORT} -Dhip_thrust_sort=${OPENMC_AMD_SORT} -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -S "$TEST_DIR/openmc" -B .
 make VERBOSE=1 install
 
 fi
