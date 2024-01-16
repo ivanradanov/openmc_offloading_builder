@@ -12,27 +12,23 @@ source "$HOME/bin/llvm-enable-corona.sh" --release
 
 CURDATE=$(date +"%Y-%m-%dT%H:%M:%S%z")
 
-#FACTORS="1 2 3 4 5 6 7 8 9 10"
-#DYN_CONV="0 1"
-FACTORS="1 2"
-DYN_CONV="0 1"
-COAL_FRIENDLY="0 1"
-IDC="0 1"
-
 NRUNS="3"
 
+DISTRIBUTE_FACTORS="1 2 4"
+FOR_FACTORS="1 2 4"
+DYN_CONV="0 1"
+TIMEOUT=8h
+
+for d in $DISTRIBUTE_FACTORS; do
+for f in $FOR_FACTORS; do
 for dc in $DYN_CONV; do
-for i in $FACTORS; do
-for cf in $COAL_FRIENDLY; do
-for idc in $IDC; do
     JOB_NAME="$dc-$i-$cf-$idc"
     OMP_PROFILE_DIR="$LCWS/results/openmc-offload/$CURDATE/omp-profile-$JOB_NAME-dir"
     mkdir -p "$OMP_PROFILE_DIR"
 
-    export OMP_OPT_COARSENING_FACTOR="$i"
-    export OMP_OPT_COARSENING_DYNAMIC_CONVERGENCE="$dc"
-    export OMP_OPT_COARSENING_COALESCING_FRIENDLY="$cf"
-    export OMP_OPT_COARSENING_INCREASE_DISTRIBUTE_CHUNKING="$idc"
+    export OMPX_COARSEN_DISTRIBUTE_OVERRIDE="$d"
+    export OMPX_COARSEN_FOR_OVERRIDE="$f"
+    export UNROLL_AND_INTERLEAVE_DYNAMIC_CONVERGENCE="$dc"
 
     # Sometimes ccache from different nodes interact badly and things fail
     #export CCACHE_DISABLE=1
@@ -63,9 +59,8 @@ for idc in $IDC; do
     LIBOMPTARGET_PROFILE_DIR="$OMP_PROFILE_DIR/openmc/"
     mkdir -p "$LIBOMPTARGET_PROFILE_DIR"
     for run in $(seq "$NRUNS"); do
-            LIBOMPTARGET_PROFILE="$LIBOMPTARGET_PROFILE_DIR/openmp.profile.out.$run" ./build_openmc.sh performance 2>&1 | tee -a "$RUN_INFO"
+        LIBOMPTARGET_PROFILE="$LIBOMPTARGET_PROFILE_DIR/openmp.profile.out.$run" ./build_openmc.sh performance 2>&1 | tee -a "$RUN_INFO"
     done
-done
 done
 done
 done
