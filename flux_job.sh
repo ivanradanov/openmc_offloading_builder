@@ -22,7 +22,7 @@ TIMEOUT=8h
 for d in $DISTRIBUTE_FACTORS; do
 for f in $FOR_FACTORS; do
 for dc in $DYN_CONV; do
-    JOB_NAME="$dc-$i-$cf-$idc"
+    JOB_NAME="$d-$f-$dc"
     OMP_PROFILE_DIR="$LCWS/results/openmc-offload/$CURDATE/omp-profile-$JOB_NAME-dir"
     mkdir -p "$OMP_PROFILE_DIR"
 
