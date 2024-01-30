@@ -59,7 +59,7 @@ for dc in $DYN_CONV; do
     LIBOMPTARGET_PROFILE_DIR="$OMP_PROFILE_DIR/openmc/"
     mkdir -p "$LIBOMPTARGET_PROFILE_DIR"
     for run in $(seq "$NRUNS"); do
-        LIBOMPTARGET_PROFILE="$LIBOMPTARGET_PROFILE_DIR/openmp.profile.out.$run" ./build_openmc.sh performance 2>&1 | tee -a "$RUN_INFO"
+        LIBOMPTARGET_PROFILE_GRANULARITY=1 LIBOMPTARGET_PROFILE="$LIBOMPTARGET_PROFILE_DIR/openmp.profile.out.$run" ./build_openmc.sh performance 2>&1 | tee -a "$RUN_INFO"
     done
 done
 done
