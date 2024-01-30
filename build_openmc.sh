@@ -34,7 +34,7 @@ module load cmake
 # On the Argonne JLSE cluster, use "module load llvm/master-nightly"
 #module load llvm
 module load rocm
-. enable.sh /l/ssd/ivanov2/llvm-release/install
+. enable.sh /tmp/ivanov2/llvm-release/install/
 #. llvm-enable-corona.sh --release
 #. enable.sh $LCWS/opt/llvm/
 
@@ -42,7 +42,7 @@ module load rocm
 # CmakePrests.json file at:
 # https://github.com/exasmr/openmc/blob/openmp-target-offload/CMakePresets.json)
 # (some options are llvm_a100, llvm_v100, llvm_mi100, llvm_mi250x, spirv_aot)
-OPENMC_TARGET=llvm_mi50
+OPENMC_TARGET=llvm_mi250_nu
 
 # If you are compiling for NVIDIA or Intel, you may want to enable
 # use of a vendor library to accelerate particle sorting.
@@ -81,8 +81,8 @@ fi
 ####################################################################
 # Compilation
 
-BUILD_DIR="/l/ssd/ivanov2/openmc-offloading/build/"
-INSTALL_DIR="/l/ssd/ivanov2/openmc-offloading/install/"
+BUILD_DIR="/tmp/ivanov2/openmc-offloading/build"
+INSTALL_DIR="/tmp/ivanov2/openmc-offloading/install"
 #INSTALL_DIR="$(readlink -f "$BUILD_DIR/../install")"
 
 if [ "$1" = "all" ] || [ "$1" = "compile" ]; then
