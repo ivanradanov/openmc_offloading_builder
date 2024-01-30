@@ -34,7 +34,8 @@ module load cmake
 # On the Argonne JLSE cluster, use "module load llvm/master-nightly"
 #module load llvm
 module load rocm
-. llvm-enable-corona.sh --release
+. enable.sh /l/ssd/ivanov2/llvm-release/install
+#. llvm-enable-corona.sh --release
 #. enable.sh $LCWS/opt/llvm/
 
 # GPU target/compiler selection (full list in OpenMC's main directory
