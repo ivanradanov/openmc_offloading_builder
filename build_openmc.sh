@@ -24,7 +24,7 @@ fi
 
 # HDF5 and CMake dependencies
 #module load spack
-module load cmake
+#module load cmake
 #module load hdf5
 
 # Note - If you have manually compiled HDF5, set the HDF5_ROOT
@@ -34,7 +34,8 @@ module load cmake
 # On the Argonne JLSE cluster, use "module load llvm/master-nightly"
 #module load llvm
 module load rocm
-. enable.sh /tmp/ivanov2/llvm-release/install/
+. enable.sh /p/lustre1/ivanov2/opt/llvm-release/install/
+#. enable.sh /tmp/ivanov2/llvm-release/install/
 #. llvm-enable-corona.sh --release
 #. enable.sh $LCWS/opt/llvm/
 

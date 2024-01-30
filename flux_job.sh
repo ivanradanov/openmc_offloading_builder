@@ -4,10 +4,8 @@ set -e
 set -x
 
 module load rocm
-module load ninja
-
-llvm-build-corona.sh --release
-source "$HOME/bin/llvm-enable-corona.sh" --release
+llvm-build-tioga.sh --release
+. enable.sh /p/lustre1/ivanov2/opt/llvm-release/install/
 
 
 CURDATE=$(date +"%Y-%m-%dT%H:%M:%S%z")
