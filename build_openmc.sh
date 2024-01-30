@@ -42,7 +42,7 @@ module load rocm
 # CmakePrests.json file at:
 # https://github.com/exasmr/openmc/blob/openmp-target-offload/CMakePresets.json)
 # (some options are llvm_a100, llvm_v100, llvm_mi100, llvm_mi250x, spirv_aot)
-OPENMC_TARGET=llvm_mi250_nu
+OPENMC_TARGET=llvm_mi250
 
 # If you are compiling for NVIDIA or Intel, you may want to enable
 # use of a vendor library to accelerate particle sorting.
