@@ -132,8 +132,7 @@ TEST_LOG=log.txt
 rm -f ${TEST_LOG}
 
 # Program Launch
-openmc --event &>> ${TEST_LOG}
-cat ${TEST_LOG}
+openmc --event |& tee ${TEST_LOG}
 
 # Begin Result Validation
 TEST_RESULT=$(cat ${TEST_LOG}      | grep "Absorption" | cut -d '=' -f 2 | xargs)
@@ -160,8 +159,7 @@ TEST_LOG=log.txt
 rm -f ${TEST_LOG}
 
 # Program Launch
-openmc --event &>> ${TEST_LOG}
-cat ${TEST_LOG}
+openmc --event |& tee ${TEST_LOG}
 
 # Begin Result Validation
 TEST_RESULT=$(cat ${TEST_LOG}      | grep "Absorption" | cut -d '=' -f 2 | xargs)
